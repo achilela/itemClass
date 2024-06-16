@@ -13,7 +13,7 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
 
 def classify_text(input_text):
-    response = openai.Completion.create(
+    response = client.completions.create(
         model=model_id,
         prompt=input_text,
         max_tokens=50
