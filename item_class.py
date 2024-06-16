@@ -11,14 +11,15 @@ model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
 
 # Function to classify a single item
 def classify_item(item):
-    response = openai.ChatCompletion.create(
+    response = openai.Completion.create(
         model=model_id,
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant that classifies maintenance items."},
-            {"role": "user", "content": f"Classify the following maintenance item: {item}"}
-        ]
+        prompt=f"Classify the following maintenance item: {item}",
+        max_tokens=50,
+        n=1,
+        stop=None,
+        temperature=0.2,
     )
-    return response.choices[0].message["content"]
+    return response.choices[0].text.strip()
 
 # Streamlit app
 st.title("Item Classification with Fine-Tuned OpenAI Model")
@@ -35,7 +36,7 @@ if st.button("Classify Single Item"):
 
 # Batch classification
 st.header("Classify Items in Tabular Form")
-uploaded_file = st.file_uploader("Upload a CSV file with items to classify", type=[".csv"])
+uploaded_file = st.file_uploader("Upload a CSV file with items to classify", type=["csv"])
 
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
