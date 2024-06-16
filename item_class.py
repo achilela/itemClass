@@ -6,7 +6,7 @@ import pandas as pd
 openai.api_key = 'your_openai_api_key'
 
 # Define the model ID
-model_id = "ft:gpt-3.5-turbo-0125:org-kffxE49MBiPf5fxz9XKPbZzR:ftjob-fctvU9NOHMch5ioWC7fEBBda"
+model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
 
 # Function to classify a single item
 def classify_item(item):
