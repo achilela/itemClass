@@ -1,25 +1,31 @@
 import streamlit as st
 import openai
 import pandas as pd
-import os
 
-# Load the OpenAI API key from environment variable
-openai.api_key = os.getenv('OPENAI_API_KEY')
+# Set your OpenAI API key
+openai.api_key = "YOUR_OPENAI_API_KEY"
 
-# Define the model ID
+# Model ID
 model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
 
-# Function to classify a single item
-def classify_item(item):
-    response = openai.Completion.create(
-        model=model_id,
-        prompt=f"Classify the following maintenance item: {item}",
-        max_tokens=50,
-        n=1,
-        stop=None,
-        temperature=0.5,
-    )
-    return response.choices[0].text.strip()
+def Inference_func(Prompt, question, model):
+    try:
+        st.write("Sending request to OpenAI API...")
+        response = openai.ChatCompletion.create(
+            model=model,
+            temperature=0,
+            messages=[
+                {"role": "system", "content": Prompt},
+                {"role": "user", "content": question},
+            ]
+        )
+        st.write("Response received from OpenAI API")
+        output = response.choices[0].message['content']
+        return output
+    
+    except Exception as e:
+        st.error(f"Error: {e}")
+        return None
 
 st.title("Text Classification with OpenAI Fine-Tuned Model")
 
@@ -32,7 +38,7 @@ if input_type == "Single Input":
     single_input = st.text_area("Enter text to classify:")
     if st.button("Classify"):
         if single_input:
-            result = classify_item("Please classify the following text:", single_input, model_id)
+            result = Inference_func("Please classify the following text:", single_input, model_id)
             if result is not None:
                 st.write("Classification Result:", result)
             else:
@@ -51,3 +57,4 @@ elif input_type == "Tabular Input":
             df['Classification'] = df.iloc[:, 0].apply(lambda x: Inference_func("Please classify the following text:", x, model_id))
             st.write("Classification Results:")
             st.write(df)
+
