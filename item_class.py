@@ -42,4 +42,13 @@ if input_type == "Single Input":
             st.write("Please enter some text to classify.")
 
 elif input_type == "Tabular Input":
-    uploaded_file = st.file_uploader("Choose a CSV file", type
+    uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+    if uploaded_file is not None:
+        df = pd.read_csv(uploaded_file)
+        st.write("Uploaded Data:")
+        st.write(df)
+        
+        if st.button("Classify"):
+            df['Classification'] = df.iloc[:, 0].apply(lambda x: Inference_func("Please classify the following text:", x, model_id))
+            st.write("Classification Results:")
+            st.write(df)
