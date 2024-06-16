@@ -21,9 +21,9 @@ def Inference_func(Prompt, question, model):
                 {"role": "user", "content": question},
             ]
         )
-        output = response.choices[0].message['content']
+        output = response.choices[0].message.content
 
-completion.choices[0].message.content
+
         
         return output
     
