@@ -17,17 +17,16 @@ model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
 def Inference_func(Prompt, question, model):
     try:
         st.write("Sending request to OpenAI API...")
-        response = openai.ChatCompletion.create(
+        response = openai.Completion.create(
             model=model,
-            temperature=0,
-            messages=[
-                {"role": "system", "content": Prompt},
-                {"role": "user", "content": question},
-            ]
+            prompt=f"{Prompt}\n\nUser: {question}\n",
+            max_tokens=100,
+            n=1,
+            stop=None,
+            temperature=0.5,
         )
         st.write("Response received from OpenAI API")
-        st.write(response)  # Log the full response for debugging
-        output = response.choices[0].message['content']
+        output = response.choices[0].text.strip()
         return output
     
     except Exception as e:
