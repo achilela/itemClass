@@ -4,10 +4,10 @@ import pandas as pd
 import os
 
 # Load the OpenAI API key from environment variable
-openai.api_key = os.getenv('OPENAI_API_KEY')
+#openai.api_key = os.getenv('OPENAI_API_KEY')
 
 # Set your OpenAI API key
-#openai.api_key = "YOUR_OPENAI_API_KEY"
+openai.api_key = "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"
 
 # Model ID
 model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
