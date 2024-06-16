@@ -1,34 +1,28 @@
-import streamlit as st
 import openai
+import streamlit as st
 import pandas as pd
+import os
 
-from openai import OpenAI
-
-# Set your OpenAI API key
-if 'OPENAI_API_KEY' not in st.secrets:
-    st.error("Please set your OpenAI API key in Streamlit secrets.")
-else:
-    openai.api_key = st.secrets["OPENAI_API_KEY"]
+# Set your OpenAI API key (replace 'YOUR_OPENAI_API_KEY' with your actual API key or use an environment variable)
+openai.api_key = os.getenv("YOUR_OPENAI_API_KEY")
 
 # Model ID
 model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
 
-
-def Inference_func(Prompt, question, model):
+def classify_text(text, model):
+    prompt = f"Please classify the following text: '{text}'"
     try:
-        st.write("Sending request to OpenAI API...")
-        response = openai.Completion.create(
+        response = openai.ChatCompletion.create(
             model=model,
-            prompt=f"{Prompt}\n\nUser: {question}\n",
-            max_tokens=100,
-            n=1,
-            stop=None,
-            temperature=0.5,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt,
+                }
+            ],
+            max_tokens=60
         )
-        st.write("Response received from OpenAI API")
-        output = response.choices[0].text.strip()
-        return output
-    
+        return response.choices[0].message["content"].strip()
     except Exception as e:
         st.error(f"Error: {e}")
         return None
@@ -44,7 +38,7 @@ if input_type == "Single Input":
     single_input = st.text_area("Enter text to classify:")
     if st.button("Classify"):
         if single_input:
-            result = Inference_func("Please classify the following text:", single_input, model_id)
+            result = classify_text(single_input, model_id)
             if result is not None:
                 st.write("Classification Result:", result)
             else:
@@ -55,16 +49,15 @@ if input_type == "Single Input":
 elif input_type == "Tabular Input":
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
     if uploaded_file is not None:
-        try:
-            df = pd.read_csv(uploaded_file)
-            st.write("Uploaded Data:")
+        df = pd.read_csv(uploaded_file)
+        st.write("Uploaded Data:")
+        st.write(df)
+
+        column_to_classify = st.selectbox("Select the column to classify", df.columns)
+
+        if st.button("Classify"):
+            df['Classification'] = df[column_to_classify].apply(lambda x: classify_text(x, model_id))
+            st.write("Classification Results:")
             st.write(df)
-
-            text_column = st.selectbox("Select the column containing the text to classify", df.columns)
-
-            if st.button("Classify"):
-                df['Classification'] = df[text_column].apply(lambda x: Inference_func("Please classify the following text:", x, model_id))
-                st.write("Classification Results:")
-                st.write(df)
-        except Exception as e:
-            st.error(f"Error: {e}")
+            df.to_csv('classified_output.csv', index=False)
+            st.write("Results saved to 'classified_output.csv'")
