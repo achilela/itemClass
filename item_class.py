@@ -26,10 +26,10 @@ def Inference_func(Prompt, question, model):
                 {"role": "user", "content": question},
             ]
         )
-        st.write("Response received from OpenAI API")
+        #st.write("Response received from OpenAI API")
         #output = response.choices[0].message.content
-        #output = response.choices[0].message['content']
-        output = completion.choices[0].message.content
+        output = response.choices[0].message['content']
+        #output = completion.choices[0].message.content
         return output
     except Exception as e:
         st.error(f"Error: {e}")
