@@ -1,22 +1,18 @@
 import streamlit as st
 import openai
 import pandas as pd
-import os
-
-# Load the OpenAI API key from environment variable
-openai.api_key = os.getenv('OPENAI_API_KEY')
 
 # Set your OpenAI API key
-#openai.api_key = "sk-"
+openai.api_key = "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"
 
 # Model ID
 model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
 
 def classify_text(input_text):
-    response = client.completions.create(
+    response = openai.Completion.create(
         model=model_id,
         prompt=input_text,
-        max_tokens=50
+        max_tokens=10
     )
     return response.choices[0].text.strip()
 
@@ -47,4 +43,3 @@ elif input_type == "Tabular Input":
             df['Classification'] = df.iloc[:, 0].apply(classify_text)
             st.write("Classification Results:")
             st.write(df)
-
