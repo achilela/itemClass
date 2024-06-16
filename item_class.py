@@ -2,7 +2,12 @@ import streamlit as st
 import openai
 import pandas as pd
 from openai import OpenAI
-client = OpenAI(api_key = "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")
+
+import os
+
+# Load the OpenAI API key from environment variable
+api_key = os.getenv('OPENAI_API_KEY')
+client = OpenAI(api_key)
 
 
 # Set your OpenAI API key
