@@ -5,6 +5,12 @@ import os
 
 # Set your OpenAI API key (replace 'YOUR_OPENAI_API_KEY' with your actual API key or use an environment variable)
 openai.api_key = os.getenv("YOUR_OPENAI_API_KEY")
+# lets initialize the API client 1st
+client = openai.OpenAI(
+    # This is the default and can be omitted
+    api_key=os.getenv("API")
+)
+
 
 # Model ID
 model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
