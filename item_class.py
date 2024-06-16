@@ -6,52 +6,45 @@ import os
 # Load the OpenAI API key from environment variable
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
-# Define the model ID
+# Set your OpenAI API key
+#openai.api_key = "YOUR_OPENAI_API_KEY"
+
+# Model ID
 model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
 
-# Function to classify a single item
-def classify_item(item):
+def classify_text(input_text):
     response = openai.Completion.create(
         model=model_id,
-        prompt=f"Classify the following maintenance item: {item}",
-        max_tokens=50,
-        n=1,
-        stop=None,
-        temperature=0.2,
+        prompt=input_text,
+        max_tokens=50
     )
     return response.choices[0].text.strip()
 
-# Streamlit app
-st.title("Item Classification with Fine-Tuned OpenAI Model")
+st.title("Text Classification with OpenAI Fine-Tuned Model")
 
-# Single item classification
-st.header("Classify a Single Item")
-single_item = st.text_input("Enter the item description:")
-if st.button("Classify Single Item"):
-    if single_item:
-        prediction = classify_item(single_item)
-        st.write(f"ItemClass Prediction: {prediction}")
-    else:
-        st.write("Please enter an item description.")
+st.write("This app classifies input text using a fine-tuned GPT-3.5 model.")
 
-# Batch classification
-st.header("Classify Items in Tabular Form")
-uploaded_file = st.file_uploader("Upload a CSV file with items to classify", type=["csv"])
+# Option to choose between single input and tabular input
+input_type = st.radio("Choose input type:", ("Single Input", "Tabular Input"))
 
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
-    if 'Item' not in df.columns:
-        st.error("CSV must contain an 'Item' column.")
-    else:
-        if st.button("Classify Items"):
-            df['Prediction'] = df['Item'].apply(classify_item)
+if input_type == "Single Input":
+    single_input = st.text_area("Enter text to classify:")
+    if st.button("Classify"):
+        if single_input:
+            result = classify_text(single_input)
+            st.write("Classification Result:", result)
+        else:
+            st.write("Please enter some text to classify.")
+
+elif input_type == "Tabular Input":
+    uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+    if uploaded_file is not None:
+        df = pd.read_csv(uploaded_file)
+        st.write("Uploaded Data:")
+        st.write(df)
+        
+        if st.button("Classify"):
+            df['Classification'] = df.iloc[:, 0].apply(classify_text)
             st.write("Classification Results:")
             st.write(df)
-            csv = df.to_csv(index=False)
-            st.download_button(label="Download Predictions as CSV", data=csv, file_name="predictions.csv", mime="text/csv")
 
-st.markdown("""
-    ### Usage:
-    - To classify a single item, enter the description in the text box and click the "Classify Single Item" button.
-    - To classify multiple items, upload a CSV file with an "Item" column and click the "Classify Items" button.
-""")
