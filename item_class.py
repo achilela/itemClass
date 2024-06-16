@@ -22,7 +22,7 @@ def Inference_func(Prompt, question, model):
         return output
     
     except Exception as e:
-        print(e)
+        st.error(f"Error: {e}")
         return None
 
 st.title("Text Classification with OpenAI Fine-Tuned Model")
@@ -37,7 +37,10 @@ if input_type == "Single Input":
     if st.button("Classify"):
         if single_input:
             result = Inference_func("Please classify the following text:", single_input, model_id)
-            st.write("Classification Result:", result)
+            if result is not None:
+                st.write("Classification Result:", result)
+            else:
+                st.write("Failed to classify the text. Please check the error message above.")
         else:
             st.write("Please enter some text to classify.")
 
@@ -52,3 +55,4 @@ elif input_type == "Tabular Input":
             df['Classification'] = df.iloc[:, 0].apply(lambda x: Inference_func("Please classify the following text:", x, model_id))
             st.write("Classification Results:")
             st.write(df)
+
