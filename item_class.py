@@ -32,7 +32,7 @@ if input_type == "Single Input":
     single_input = st.text_area("Enter text to classify:")
     if st.button("Classify"):
         if single_input:
-            result = classify_item("Please classify the following text:" single_input, model_id)
+            result = classify_item("Please classify the following text:", single_input, model_id)
             if result is not None:
                 st.write("Classification Result:", result)
             else:
