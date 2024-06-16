@@ -1,9 +1,10 @@
 import streamlit as st
 import openai
 import pandas as pd
+import os
 
-# Set your OpenAI API key
-openai.api_key = 'your_openai_api_key'
+# Load the OpenAI API key from environment variable
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 # Define the model ID
 model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
@@ -34,7 +35,7 @@ if st.button("Classify Single Item"):
 
 # Batch classification
 st.header("Classify Items in Tabular Form")
-uploaded_file = st.file_uploader("Upload a CSV file with items to classify", type=["csv"])
+uploaded_file = st.file_uploader("Upload a CSV file with items to classify", type=[".csv"])
 
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
