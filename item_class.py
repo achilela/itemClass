@@ -13,7 +13,7 @@ model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
 
 def Inference_func(Prompt, question, model):
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model=model,
             temperature=0,
             messages=[
@@ -22,6 +22,9 @@ def Inference_func(Prompt, question, model):
             ]
         )
         output = response.choices[0].message['content']
+
+completion.choices[0].message.content
+        
         return output
     
     except Exception as e:
