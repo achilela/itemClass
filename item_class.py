@@ -4,7 +4,7 @@ import pandas as pd
 import os
 
 # Set your OpenAI API key (replace 'YOUR_OPENAI_API_KEY' with your actual API key or use an environment variable)
-openai.api_key = os.getenv("YOUR_OPENAI_API_KEY")
+#openai.api_key = os.getenv("YOUR_OPENAI_API_KEY")
 # lets initialize the API client 1st
 client = openai.OpenAI(
     # This is the default and can be omitted
