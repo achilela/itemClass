@@ -12,7 +12,7 @@ model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
 def classify_text(text, model):
     prompt = f"Please classify the following text: '{text}'"
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model=model,
             messages=[
                 {
