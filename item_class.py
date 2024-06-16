@@ -2,6 +2,8 @@ import streamlit as st
 import openai
 import pandas as pd
 
+from openai import OpenAI
+
 # Set your OpenAI API key
 if 'OPENAI_API_KEY' not in st.secrets:
     st.error("Please set your OpenAI API key in Streamlit secrets.")
@@ -11,10 +13,12 @@ else:
 # Model ID
 model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
 
+
 def Inference_func(Prompt, question, model):
     try:
         st.write("Sending request to OpenAI API...")
-        response = openai.ChatCompletion.create(
+        client = OpenAI(api_key=openai.api_key)
+        response = client.chat.completions.create(
             model=model,
             temperature=0,
             messages=[
