@@ -27,6 +27,7 @@ def Inference_func(Prompt, question, model):
             ]
         )
         st.write("Response received from OpenAI API")
+        #output = response.choices[0].message.content
         output = response.choices[0].message['content']
         return output
     except Exception as e:
