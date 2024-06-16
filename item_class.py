@@ -1,9 +1,12 @@
 import streamlit as st
 import openai
 import pandas as pd
+from openai import OpenAI
+client = OpenAI(api_key = "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")
+
 
 # Set your OpenAI API key
-openai.api_key = "YOUR_OPENAI_API_KEY"
+#openai.api_key = "YOUR_OPENAI_API_KEY"
 
 # Model ID
 model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
