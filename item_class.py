@@ -16,7 +16,7 @@ model_id = "ft:gpt-3.5-turbo-0125:valonylabsz:finetune-itemclass:9aIqocEw"
 
 def Inference_func(Prompt, question, model):
     try:
-        st.write("Sending request to OpenAI API...")
+        #st.write("Sending request to OpenAI API...")
         client = OpenAI(api_key=openai.api_key)
         response = client.chat.completions.create(
             model=model,
