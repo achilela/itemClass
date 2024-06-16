@@ -1,12 +1,3 @@
-Your code seems to be correct and should work as expected, given that you have the correct OpenAI API key and the model ID is correct. However, there are a few things I would like to point out to improve the code:
-
-1. You should handle the case when the API key is not set. You can add a check for this at the beginning of your code.
-2. The column name for the text to be classified in the CSV file is hardcoded as the first column (`df.iloc[:, 0]`). It would be better to let the user select the column.
-3. You should add some error handling for the file upload part. For example, check if the uploaded file is indeed a CSV file.
-
-Here's the improved code:
-
-```python
 import streamlit as st
 import openai
 import pandas as pd
@@ -73,6 +64,3 @@ elif input_type == "Tabular Input":
                 st.write(df)
         except Exception as e:
             st.error(f"Error: {e}")
-```
-
-In this code, I've added a check for the API key, allowed the user to select the column containing the text to classify, and added error handling for the file upload part.
